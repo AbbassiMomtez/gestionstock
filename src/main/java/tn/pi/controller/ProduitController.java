@@ -29,7 +29,7 @@ public class ProduitController {
         }
 
         model.addAttribute("produits", produits);
-        return "produits/produit"; // Retourne la vue des produits
+        return "produits/produits"; // Retourne la vue des produits
     }
 
     @GetMapping("/add")

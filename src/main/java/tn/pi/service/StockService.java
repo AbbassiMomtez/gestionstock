@@ -12,17 +12,20 @@ import java.util.List;
 @Service
 public class StockService {
 
-    @Autowired
-    private StockRepository stockRepository; // Injection d'une instance de StockRepository
+    private static StockRepository stockRepository = null; // Injection d'une instance de StockRepository
 
-    public Stock getStockByProduitId(Long produitId) {
+    public StockService(StockRepository stockRepository) {
+        StockService.stockRepository = stockRepository;
+    }
+
+    public static Stock getStockByProduitId(Long produitId) {
         if (produitId == null) {
             throw new IllegalArgumentException("Le produit ID ne peut pas être null.");
         }
 
         // Appel correct à la méthode non statique findByProduitId
         Optional<Stock> stockOptional = stockRepository.findByProduitId(produitId);
-        if (stockOptional == null) {
+        if (stockOptional.isEmpty()) {
             throw new IllegalStateException("La méthode findByProduitId retourne null. Vérifiez StockRepository.");
         }
 
@@ -33,8 +36,8 @@ public class StockService {
     public void updateStock(Stock stock) {
         stockRepository.save(stock);
     }
-    public Stock saveStock(Stock stock) {
-        return stockRepository.save(stock);
+    public void saveStock(Stock stock) {
+        stockRepository.save(stock);
     }
     public List<Stock> getAllStocks() {
         return stockRepository.findAll();
