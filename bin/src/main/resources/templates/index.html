@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Gestion de Stock</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Bienvenue dans l'application de Gestion de Stock</h1>
+    <nav>
+        <ul>
+            <li><a th:href="@{/produits}">Produits</a></li>
+            <li><a th:href="@{/fournisseurs}">Fournisseurs</a></li>
+            <li><a th:href="@{/clients}">Clients</a></li>
+            <li><a th:href="@{/commandes}">Commandes</a></li>
+            <li><a th:href="@{/approvisionnements}">Approvisionnements</a></li>
+            <li><a th:href="@{/paiements}">Paiements</a></li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

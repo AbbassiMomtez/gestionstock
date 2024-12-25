@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Gestion des Produits</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Liste des Produits</h1>
+    <a class="btn btn-primary" th:href="@{/produits/add}">Ajouter un Produit</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Prix</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="produit : ${produits}">
+            <td th:text="${produit.id}"></td>
+            <td th:text="${produit.nom}"></td>
+            <td th:text="${produit.prix}"></td>
+            <td>
+                <a th:href="@{/produits/edit/{id}(id=${produit.id})}" class="btn btn-warning">Modifier</a>
+                <a th:href="@{/produits/delete/{id}(id=${produit.id})}" class="btn btn-danger">Supprimer</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
