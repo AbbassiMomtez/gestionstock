@@ -16,25 +16,40 @@ public class Stock {
 
     private int quantite;
 
-    // Getter for quantite
+    // Getter pour quantite
     public int getQuantite() {
         return quantite;
     }
 
-    // Setter for quantite
+    // Setter pour quantite
     public void setQuantite(int quantite) {
         this.quantite = quantite;
     }
 
-    // Method to increase stock
+    // Méthode pour augmenter la quantité en stock
     public void augmenter(int quantite) {
         this.quantite += quantite;
     }
 
-    // Method to decrease stock
+    // Méthode pour diminuer la quantité en stock
     public void diminuer(int quantite) {
         this.quantite -= quantite;
     }
 
-    // Getters and setters for other properties
+    // Getters et setters pour autres propriétés
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Produit getProduit() {
+        return produit;
+    }
+
+    public void setProduit(Produit produit) {
+        this.produit = produit;
+    }
 }

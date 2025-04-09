@@ -33,6 +33,9 @@ public class ProduitService {
         }
         return Optional.empty();
     }
+    public List<Produit> getProduitsByIds(List<Long> ids) {
+        return produitRepository.findAllById(ids);
+    }
 
     public void deleteProduit(Long id) {
         produitRepository.deleteById(id);
