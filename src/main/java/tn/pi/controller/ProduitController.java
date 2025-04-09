@@ -22,11 +22,14 @@ public class ProduitController {
     public String getAllProduits(Model model) {
         List<Produit> produits = produitService.getAllProduits();
 
-        // Inject stock information into each product
         for (Produit produit : produits) {
-            Stock stock = StockService.getStockByProduitId(produit.getId());
-            produit.setQuantiteStock(stock != null ? stock.getQuantite() : 0); // Set the quantity stock or 0 if null
+            StockService.findOptionalByProduitId(produit.getId())
+                    .ifPresentOrElse(
+                            stock -> produit.setQuantiteStock(stock.getQuantite()),
+                            () -> produit.setQuantiteStock(0)
+                    );
         }
+
 
         model.addAttribute("produits", produits);
         return "produits/produits"; // Retourne la vue des produits

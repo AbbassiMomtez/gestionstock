@@ -23,13 +23,11 @@ public class StockService {
             throw new IllegalArgumentException("Le produit ID ne peut pas être null.");
         }
 
-        // Appel correct à la méthode non statique findByProduitId
-        Optional<Stock> stockOptional = stockRepository.findByProduitId(produitId);
-        if (stockOptional.isEmpty()) {
-            throw new IllegalStateException("La méthode findByProduitId retourne null. Vérifiez StockRepository.");
-        }
-
-        return stockOptional.orElseThrow(() -> new StockNotFoundException("Stock introuvable pour le produit ID : " + produitId));
+        return stockRepository.findByProduitId(produitId)
+                .orElseThrow(() -> new StockNotFoundException("Stock introuvable pour le produit ID : " + produitId));
+    }
+    public static Optional<Stock> findOptionalByProduitId(Long produitId) {
+        return stockRepository.findByProduitId(produitId);
     }
 
     // Method to update stock after payment
