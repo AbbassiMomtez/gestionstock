@@ -1,9 +1,11 @@
 package tn.pi.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tn.pi.model.Produit;
 import tn.pi.service.ProduitService;
 import tn.pi.model.Stock;
@@ -64,8 +66,13 @@ public class ProduitController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteProduit(@PathVariable Long id) {
-        produitService.deleteProduit(id);
+    public String deleteProduit(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            produitService.deleteProduit(id); // appel à deleteById dans le service
+            redirectAttributes.addFlashAttribute("successMessage", "Produit supprimé avec succès.");
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("erreurSuppression", "Impossible de supprimer ce produit car il est déja mouvementé.");
+        }
         return "redirect:/produits"; // Redirects to the list of products after deletion
     }
 }

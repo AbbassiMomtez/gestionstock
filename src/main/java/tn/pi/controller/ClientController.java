@@ -1,9 +1,11 @@
 package tn.pi.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tn.pi.model.Client;
 import tn.pi.service.ClientService;
 
@@ -48,8 +50,15 @@ public class ClientController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteClient(@PathVariable Long id) {
-        clientService.deleteClient(id);
+    public String deleteClient(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            clientService.deleteClient(id); // appel à deleteById dans le service
+            redirectAttributes.addFlashAttribute("successMessage", "Client supprimé avec succès.");
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("erreurSuppression", "Impossible de supprimer le client car il pocede un historique de vente.");
+        }
         return "redirect:/clients"; // Redirige vers la liste des clients après la suppression
     }
 }
+
+

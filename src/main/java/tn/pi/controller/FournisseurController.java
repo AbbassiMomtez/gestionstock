@@ -1,9 +1,11 @@
 package tn.pi.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tn.pi.model.Fournisseur;
 import tn.pi.service.FournisseurService;
 
@@ -48,8 +50,14 @@ public class FournisseurController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteFournisseur(@PathVariable Long id) {
-        fournisseurService.deleteFournisseur(id);
+    public String deleteFournisseur(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            fournisseurService.deleteFournisseur(id); // appel à deleteById dans le service
+            redirectAttributes.addFlashAttribute("successMessage", "Fournissuer supprimé avec succès.");
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("erreurSuppression", "Impossible de supprimer le fournisseur car il pocede un historique d'achat.");
+        }
         return "redirect:/fournisseurs";
     }
 }
+

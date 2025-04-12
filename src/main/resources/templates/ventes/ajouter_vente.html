@@ -127,7 +127,7 @@
             const quantity = parseInt(quantityInput.value);
             const price = parseFloat(produitSelect.options[produitSelect.selectedIndex].getAttribute('data-price'));
             if (!isNaN(quantity) && produitSelect.value !== "") {
-                total += (price * quantity) * 0.81;  // Appliquer la réduction de 19%
+                total += (price * quantity);  // Appliquer la réduction de 19%
             }
         });
 

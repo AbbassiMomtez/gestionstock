@@ -102,6 +102,8 @@
                 <a th:href="@{/produits/delete/{id}(id=${produit.id})}" class="btn btn-sm btn-danger">Supprimer</a>
             </td>
         </tr>
+
+
         </tbody>
     </table>
     <div class="text-left">
@@ -126,20 +128,54 @@
         </div>
     </div>
 </div>
-
+<!-- Modal d'erreur de suppression -->
+<div class="modal fade" id="erreurSuppressionModal" tabindex="-1" aria-labelledby="erreurSuppressionModalLabel" aria-hidden="true"
+     th:if="${erreurSuppression}">
+    <div class="modal-dialog">
+        <div class="modal-content border-danger">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="erreurSuppressionModalLabel">Erreur</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <p th:text="${erreurSuppression}"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal de succes de suppression -->
+<div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <span th:text="${successMessage}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 <!-- Bootstrap Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const stockModal = document.getElementById('stockModal');
-    stockModal.addEventListener('show.bs.modal', function (event) {
-        const button = event.relatedTarget;
-        const stockQuantite = button.getAttribute('data-stock-quantite');
-        const produitNom = button.getAttribute('data-stock-produit');
+    document.addEventListener('DOMContentLoaded', function () {
+        const stockModal = document.getElementById('stockModal');
+        if (stockModal) {
+            stockModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const stockQuantite = button.getAttribute('data-stock-quantite');
+                const produitNom = button.getAttribute('data-stock-produit');
+                document.getElementById('modal-product-name').textContent = produitNom;
+                document.getElementById('modal-product-stock').textContent = stockQuantite;
+            });
+        }
 
-        document.getElementById('modal-product-name').textContent = produitNom;
-        document.getElementById('modal-product-stock').textContent = stockQuantite;
+        const erreurModalEl = document.getElementById('erreurSuppressionModal');
+        if (erreurModalEl) {
+            const erreurModal = new bootstrap.Modal(erreurModalEl);
+            erreurModal.show();
+        }
     });
 </script>
+
+
+
 <!-- Footer -->
 <footer>
     <p>&copy; 2024 Gestion de Stock. Tous droits réservés.</p>
