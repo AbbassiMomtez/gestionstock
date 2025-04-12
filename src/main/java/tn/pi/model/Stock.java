@@ -11,10 +11,10 @@ public class Stock {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "produit_id", nullable = false)
+    @JoinColumn(name = "produit_id",referencedColumnName = "id", nullable = false)
     private Produit produit;
 
-    private int quantite;
+    private int quantite = 0;
 
     // Getter pour quantite
     public int getQuantite() {

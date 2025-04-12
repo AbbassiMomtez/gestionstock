@@ -37,6 +37,7 @@ public class ProduitController {
         return "produits/produits"; // Retourne la vue des produits
     }
 
+
     @GetMapping("/add")
     public String addProduitForm(Model model) {
         model.addAttribute("produit", new Produit());
@@ -44,9 +45,10 @@ public class ProduitController {
     }
 
     @PostMapping
-    public String createProduit(@ModelAttribute Produit produit) {
+    public String createProduit(@ModelAttribute Produit produit, RedirectAttributes redirectAttributes) {
         produitService.createProduit(produit);
-        return "redirect:/produits"; // Redirects to the list of products after adding
+        redirectAttributes.addFlashAttribute("successMessage", "Produit ajouté avec succès !");
+        return "redirect:/produits"; // Redirige vers la liste après l'ajout
     }
 
     @GetMapping("/edit/{id}")
@@ -68,11 +70,14 @@ public class ProduitController {
     @GetMapping("/delete/{id}")
     public String deleteProduit(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
-            produitService.deleteProduit(id); // appel à deleteById dans le service
+            produitService.deleteProduit(id);  // Assurez-vous que deleteProduit gère bien les exceptions liées à l'intégrité des données
             redirectAttributes.addFlashAttribute("successMessage", "Produit supprimé avec succès.");
         } catch (DataIntegrityViolationException e) {
-            redirectAttributes.addFlashAttribute("erreurSuppression", "Impossible de supprimer ce produit car il est déja mouvementé.");
+            redirectAttributes.addFlashAttribute("erreurSuppression", "Impossible de supprimer le produit. Il est lié à des ventes ou à des achats.");
+        } catch (IllegalStateException e) {
+            redirectAttributes.addFlashAttribute("erreurSuppression", e.getMessage());
         }
-        return "redirect:/produits"; // Redirects to the list of products after deletion
+        return "redirect:/produits";  // Redirige vers la liste des produits après la suppression
     }
+
 }
