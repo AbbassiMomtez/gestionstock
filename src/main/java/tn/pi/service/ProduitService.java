@@ -65,7 +65,7 @@ public class ProduitService {
             }
         } else {
             // Si aucun stock trouvé, on considère que c’est une incohérence, on peut aussi supprimer directement si tu veux
-            throw new IllegalStateException("Aucun stock associé trouvé pour ce produit.");
+            produitRepository.deleteById(id);
         }
     }
 }
