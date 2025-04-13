@@ -79,7 +79,6 @@
         <tr>
             <th>ID</th>
             <th>Nom</th>
-            <th>Email</th>
             <th>Téléphone</th>
             <th>Actions</th>
         </tr>
@@ -88,7 +87,6 @@
         <tr th:each="client : ${clients}">
             <td th:text="${client.id}"></td>
             <td th:text="${client.nom}"></td>
-            <td th:text="${client.email}"></td>
             <td th:text="${client.telephone}"></td>
             <td>
                 <a th:href="@{/clients/edit/{id}(id=${client.id})}" class="btn btn-secondary">Modifier</a>

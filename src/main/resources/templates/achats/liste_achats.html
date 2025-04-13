@@ -80,7 +80,7 @@
         <tr th:each="achat : ${achats}">
             <td th:text="${achat.id}"></td>
             <td th:text="${achat.fournisseur.nom}"></td>
-            <td th:text="${#numbers.formatDecimal(achat.prixTotalAchat, 1, 'COMMA', 2, 'NONE')}"></td>
+            <td th:text="${#numbers.formatDecimal(achat.prixTotalAchat, 1, 'COMMA', 0, 'COMMA')}"></td>
             <td th:text="${#dates.format(achat.dateAchat, 'dd/MM/yyyy HH:mm')}"></td>
             <td>
                 <button
@@ -122,7 +122,7 @@
                     </p>
                     <p>
                         <strong>Total TTC :</strong>
-                        <span th:text="${#numbers.formatDecimal(achat.prixTotalAchat, 1, 'COMMA', 2, 'NONE')}">0.0</span> DT
+                        <span th:text="${#numbers.formatDecimal(achat.prixTotalAchat, 1, 'COMMA', 0, 'COMMA')}">0.0</span> DT
                     </p>
 
                     <hr>
@@ -141,8 +141,8 @@
                         <tr th:each="ligne : ${achat.lignes}">
                             <td th:text="${ligne.produit != null ? ligne.produit.nom : 'Produit inconnu'}">Produit</td>
                             <td th:text="${ligne.quantite}">0</td>
-                            <td th:text="${#numbers.formatDecimal(ligne.prixUnitaire, 1, 'COMMA', 2, 'NONE')}">0.0</td>
-                            <td th:text="${#numbers.formatDecimal(ligne.prixTotal, 1, 'COMMA', 2, 'NONE')}">0.0</td>
+                            <td th:text="${#numbers.formatDecimal(ligne.prixUnitaire, 1, 'COMMA', 0, 'COMMA')}">0.0</td>
+                            <td th:text="${#numbers.formatDecimal(ligne.prixTotal, 1, 'COMMA', 0, 'COMMA')}">0.0</td>
                         </tr>
                         </tbody>
                     </table>

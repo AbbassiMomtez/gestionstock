@@ -135,7 +135,36 @@
     }
 
     document.addEventListener('input', updateTotalPrice);
+
+    // Ajouter dynamiquement une ligne produit
+    document.getElementById('add-product').addEventListener('click', function () {
+        const container = document.getElementById('produits-container');
+        const existingRow = container.querySelector('.product-row');
+        const newRow = existingRow.cloneNode(true);
+
+        // Réinitialiser les champs dans la nouvelle ligne
+        const select = newRow.querySelector('.produit-select');
+        const quantity = newRow.querySelector('input[name="quantites"]');
+        select.selectedIndex = 0;
+        quantity.value = "";
+
+        container.appendChild(newRow);
+
+        updateTotalPrice(); // Mise à jour du prix
+    });
+
+    // Supprimer dynamiquement une ligne produit
+    document.getElementById('produits-container').addEventListener('click', function (e) {
+        if (e.target && e.target.classList.contains('remove-product')) {
+            const rows = document.querySelectorAll('.product-row');
+            if (rows.length > 1) {
+                e.target.closest('.product-row').remove();
+                updateTotalPrice();
+            }
+        }
+    });
 </script>
+
 
 <!-- Footer -->
 <footer>
