@@ -73,17 +73,88 @@
             <th>Fournisseur</th>
             <th>Prix Total</th>
             <th>Date d'Achat</th>
+            <th>Détails</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="achat : ${achats}">
             <td th:text="${achat.id}"></td>
             <td th:text="${achat.fournisseur.nom}"></td>
-            <td th:text="${achat.prixTotalAchat}"></td>
-            <td th:text="${achat.dateAchat}"></td>
+            <td th:text="${#numbers.formatDecimal(achat.prixTotalAchat, 1, 'COMMA', 2, 'NONE')}"></td>
+            <td th:text="${#dates.format(achat.dateAchat, 'dd/MM/yyyy HH:mm')}"></td>
+            <td>
+                <button
+                        class="btn btn-primary btn-sm"
+                        data-bs-toggle="modal"
+                        th:attr="data-bs-target='#detailsModal__' + ${achat.id}"
+                        th:if="${achat.id != null}">
+                    Voir détails d'achat
+                </button>
+            </td>
         </tr>
         </tbody>
     </table>
+</div>
+
+<!-- Modales pour chaque achat -->
+<div th:each="achat : ${achats}" th:if="${achat.id != null}">
+    <div class="modal fade" th:id="'detailsModal__' + ${achat.id}" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- En-tête -->
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Détails de l'achat #<span th:text="${achat.id}">ID</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- Corps -->
+                <div class="modal-body">
+                    <p>
+                        <strong>Fournisseur :</strong>
+                        <span th:text="${achat.fournisseur != null ? achat.fournisseur.nom : 'N/A'}">Nom fournisseur</span>
+                    </p>
+                    <p>
+                        <strong>Date :</strong>
+                        <span th:text="${#dates.format(achat.dateAchat, 'dd/MM/yyyy HH:mm')}">Date</span>
+                    </p>
+                    <p>
+                        <strong>Total TTC :</strong>
+                        <span th:text="${#numbers.formatDecimal(achat.prixTotalAchat, 1, 'COMMA', 2, 'NONE')}">0.0</span> DT
+                    </p>
+
+                    <hr>
+
+                    <h6>Détails des produits achetés</h6>
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Produit</th>
+                            <th>Quantité</th>
+                            <th>Prix unitaire</th>
+                            <th>Prix total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="ligne : ${achat.lignes}">
+                            <td th:text="${ligne.produit != null ? ligne.produit.nom : 'Produit inconnu'}">Produit</td>
+                            <td th:text="${ligne.quantite}">0</td>
+                            <td th:text="${#numbers.formatDecimal(ligne.prixUnitaire, 1, 'COMMA', 2, 'NONE')}">0.0</td>
+                            <td th:text="${#numbers.formatDecimal(ligne.prixTotal, 1, 'COMMA', 2, 'NONE')}">0.0</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pied -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Footer -->

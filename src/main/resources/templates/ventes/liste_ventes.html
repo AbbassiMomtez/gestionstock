@@ -53,8 +53,7 @@
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" th:href="@{/produits}">Produits</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/clients}">Clients</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/fournisseurs}">Fournisseurs</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/achats}">Achats</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/ventes}">Ventes</a></li>
             </ul>
         </div>
     </div>
@@ -64,7 +63,7 @@
 <div class="container mt-4">
     <h1 class="text-center">Liste des Ventes</h1>
     <div class="d-flex justify-content-end mb-3">
-        <a class="btn btn-primary" th:href="@{/ventes/add}">Ajouter un Vente</a>
+        <a class="btn btn-primary" th:href="@{/ventes/add}">Ajouter une Vente</a>
     </div>
     <table class="table table-bordered">
         <thead>
@@ -72,18 +71,89 @@
             <th>ID</th>
             <th>Client</th>
             <th>Prix Total</th>
-            <th>Date d'Vente</th>
+            <th>Date de Vente</th>
+            <th>Détails</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="vente : ${ventes}">
             <td th:text="${vente.id}"></td>
             <td th:text="${vente.client.nom}"></td>
-            <td th:text="${vente.prixTotalVente}"></td>
-            <td th:text="${vente.dateVente}"></td>
+            <td th:text="${#numbers.formatDecimal(vente.prixTotalVente, 1, 'COMMA', 2, 'NONE')}"></td>
+            <td th:text="${#dates.format(vente.dateVente, 'dd/MM/yyyy HH:mm')}"></td>
+            <td>
+                <button
+                        class="btn btn-primary btn-sm"
+                        data-bs-toggle="modal"
+                        th:attr="data-bs-target='#ventedetailsModal__' + ${vente.id}"
+                        th:if="${vente.id != null}">
+                    Voir détails de la vente
+                </button>
+            </td>
         </tr>
         </tbody>
     </table>
+</div>
+
+<!-- Modales pour chaque vente -->
+<div th:each="vente : ${ventes}" th:if="${vente.id != null}">
+    <div class="modal fade" th:id="'ventedetailsModal__' + ${vente.id}" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- En-tête -->
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Détails de la vente #<span th:text="${vente.id}">ID</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- Corps -->
+                <div class="modal-body">
+                    <p>
+                        <strong>Client :</strong>
+                        <span th:text="${vente.client != null ? vente.client.nom : 'N/A'}">Nom client</span>
+                    </p>
+                    <p>
+                        <strong>Date :</strong>
+                        <span th:text="${#dates.format(vente.dateVente, 'dd/MM/yyyy HH:mm')}">Date</span>
+                    </p>
+                    <p>
+                        <strong>Total TTC :</strong>
+                        <span th:text="${#numbers.formatDecimal(vente.prixTotalVente, 1, 'COMMA', 2, 'NONE')}">0.0</span> DT
+                    </p>
+
+                    <hr>
+
+                    <h6>Détails des produits vendus</h6>
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Produit</th>
+                            <th>Quantité</th>
+                            <th>Prix unitaire</th>
+                            <th>Prix total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="ligne : ${vente.lignes}">
+                            <td th:text="${ligne.produit != null ? ligne.produit.nom : 'Produit inconnu'}">Produit</td>
+                            <td th:text="${ligne.quantite}">0</td>
+                            <td th:text="${#numbers.formatDecimal(ligne.prixUnitaire, 1, 'COMMA', 2, 'NONE')}">0.0</td>
+                            <td th:text="${#numbers.formatDecimal(ligne.prixTotal, 1, 'COMMA', 2, 'NONE')}">0.0</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pied -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Footer -->
@@ -94,7 +164,20 @@
 <!-- Bootstrap Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Optionally add logic to calculate the total dynamically when quantity is selected
+    // Initialiser modaux si nécessaire
+    document.addEventListener('DOMContentLoaded', function () {
+        const modalButtons = document.querySelectorAll('[data-bs-toggle="modal"]');
+
+        modalButtons.forEach(function (button) {
+            const targetModalId = button.getAttribute('data-bs-target');
+            if (targetModalId) {
+                const modalElement = document.querySelector(targetModalId);
+                if (modalElement) {
+                    new bootstrap.Modal(modalElement);
+                }
+            }
+        });
+    });
 </script>
 </body>
 </html>
